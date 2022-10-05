@@ -4,6 +4,7 @@ import json
 from bs4 import BeautifulSoup as bs
 from selenium import webdriver
 import time
+from selenium.webdriver.chrome.options import Options
 
 ua = fake_useragent.UserAgent()
 headers = {"User-Agent": ua.ie}
@@ -57,9 +58,13 @@ links = {
 
 def check_tiktok(each):
     # tik tok is not opening(not giving me the content), so i use for this selenium
-    options = webdriver.ChromeOptions()
-    options.add_argument("user-agent={}:".format(ua.ie))
-    browser = webdriver.Chrome(executable_path="C:\\Users\\tenir\\Desktop\\zeon\\parserPython\\chromedriver\\chromedriver.exe")
+    
+    WINDOW_SIZE = "1920,1080"
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)
+    browser = webdriver.Chrome(executable_path="C:\\Users\\tenir\\Desktop\\zeon\\parserPython\\chromedriver\\chromedriver.exe", chrome_options=chrome_options)
+
     try:
         browser.get(url=each["url"])
         time.sleep(3)
@@ -96,12 +101,20 @@ def main():
                 print(ex)
         else:
             check_tiktok(each)
-    return json.dumps(links, indent=4)
+    return links[USERNAME]
             
 
 if __name__ == "__main__":
     answer = main()
-    with open("links.json", "a") as outfile:
-        outfile.write(answer)
+    data = json.load(open("./links.json"))
+    if type(data) != dict:
+        data = {data}
+
+    data[USERNAME] = answer
+
+    with open('links.json', 'w') as outfile:
+        json.dump(data, outfile, 
+                        indent=4,  
+                        separators=(',',': '))
     print(answer)
     
