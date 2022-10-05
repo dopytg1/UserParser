@@ -62,8 +62,10 @@ def check_tiktok(each):
     browser = webdriver.Chrome(executable_path="C:\\Users\\tenir\\Desktop\\zeon\\parserPython\\chromedriver\\chromedriver.exe")
     try:
         browser.get(url=each["url"])
+        time.sleep(3)
+        browser.refresh()
         # taking some time to verify from browser
-        time.sleep(8)
+        time.sleep(2)
         title = browser.title
 
         # common tiktok title looks like this (username (@user) TikTok | Смотреть свежие видео username в TikTok) 
