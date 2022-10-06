@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup as bs
 from selenium import webdriver
 import time
 from selenium.webdriver.chrome.options import Options
+import os
 
 ua = fake_useragent.UserAgent()
 headers = {"User-Agent": ua.ie}
@@ -23,7 +24,7 @@ chrome_options = Options()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)
 # set the path for your chrome driver
-browser = webdriver.Chrome(executable_path="C:\\Users\\tenir\\Desktop\\zeon\\parserPython\\chromedriver\\chromedriver.exe", chrome_options=chrome_options)
+browser = webdriver.Chrome(executable_path=os.path.abspath("./chromedriver\chromedriver.exe"), chrome_options=chrome_options)
 
 toSeeIfExist = [
     {
@@ -95,7 +96,7 @@ def main():
         else:
             check_tiktok(each)
     return links[USERNAME]
-            
+
 
 if __name__ == "__main__":
     answer = main()
