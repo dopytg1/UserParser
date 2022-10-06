@@ -17,9 +17,15 @@ URL_TEMPLATE_REDDIT = "https://www.reddit.com/user/{}/".format(USERNAME)
 URL_TEMPLATE_PIKABU = "https://pikabu.ru/@{}".format(USERNAME)
 URL_TEMPLATE_TIKTOK = "https://tiktok.com/@{}".format(USERNAME)
 
+# selenium web-browser for tiktok
+WINDOW_SIZE = "1920,1080"
+chrome_options = Options()
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)
+# set the path for your chrome driver
+browser = webdriver.Chrome(executable_path="C:\\Users\\tenir\\Desktop\\zeon\\parserPython\\chromedriver\\chromedriver.exe", chrome_options=chrome_options)
 
 toSeeIfExist = [
-    # use the value of check, to compare it with the title of a page that does not exist
     {
         "site": "instagram",
         "url": URL_TEMPLATE_INSTAGRAM,
@@ -57,24 +63,13 @@ links = {
 
 
 def check_tiktok(each):
-    # tik tok is not opening(not giving me the content), so i use for this selenium
-    
-    WINDOW_SIZE = "1920,1080"
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)
-    browser = webdriver.Chrome(executable_path="C:\\Users\\tenir\\Desktop\\zeon\\parserPython\\chromedriver\\chromedriver.exe", chrome_options=chrome_options)
-
     try:
         browser.get(url=each["url"])
         time.sleep(3)
         browser.refresh()
-        # taking some time to verify from browser
         time.sleep(2)
         title = browser.title
 
-        # common tiktok title looks like this (username (@user) TikTok | Смотреть свежие видео username в TikTok) 
-        # so i can check if page exist like this
         if USERNAME in title:
             links[USERNAME].append(each["url"])
     except Exception as ex:
@@ -94,8 +89,6 @@ def main():
                 if str(a[0]) != each["check"]:
                     links[USERNAME].append(each["url"])
             except IndexError:
-                # if page doesnt exist in github it gives nothing, this cause indexerror
-                # to make it work, using try except
                 pass
             except Exception as ex:
                 print(ex)
